@@ -1,6 +1,15 @@
 package ar.edu.utn.frc.utn;
 
 
+import ar.edu.utn.frc.utn.entities.Venta;
+import ar.edu.utn.frc.utn.entities.Ventas;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -12,36 +21,63 @@ public class Main {
                 "\n4- Mostrar por pantalla el número de factura, el comprador y el importe, de todas las ventas cuyo tipo de perfume se encuentre entre 5 y 12 y que no sean con factura de tipo C. Si no existe ninguna venta que cumpla con ese criterio disparar NoSuchElementException. " +
                 "\n5- Obtener una sublista de ventas, para aquellas ventas de un tipo de factura determinada. Si no existen elementos, disparar NoSuchElementException");
 
-        System.out.println("\n Ingresar una opción");
 
-        Scanner sc = new Scanner(System.in);
+        Ventas ventas = new Ventas();
+        while (true) {
 
-        int opcion = sc.nextInt();
+            System.out.println("\n Ingresar una opción");
+            Scanner sc = new Scanner(System.in);
+            int option = sc.nextInt();
 
-        switch (opcion) {
-            case 1: {
-                System.out.println("\n Ingresar una opción 1");
-                break;
+            if (option == 0) { break;}
+
+            if (option == 1) {
+                System.out.println("\nopción 1");
+
+                URL url = Main.class.getResource("/ventas.csv");
+
+                try {
+                    if (url != null) {
+                        ventas.InsertVenta(url);
+                        ventas.getVentas().forEach(System.out::println);
+                    } else {
+                        System.out.println("\n URL es nula");
+                    }
+                } catch (URISyntaxException e) {
+                    System.out.println("\n URL no encontrada");
+                } catch (IOException e) {
+                    System.out.println("\n Archivo no encontrado");
+                }
+
             }
-            case 2: {
-                System.out.println("\n Ingresar una opción 2");
-                break;
+            if (option == 2) {
+                System.out.println("\nopción 2");
+                System.out.println("\nIngrese el tipo factura q no desea buscar A,B,C,D");
+                char tipo = sc.next().charAt(0);
+                System.out.println("\nIngrese el importe minimo");
+                float importe = sc.nextFloat();
+                List<Venta> resultado = ventas.importeTipoFilter(tipo, importe);
+                resultado.forEach(System.out::println);
             }
-            case 3: {
-                System.out.println("\n Ingresar una opción 3");
-                break;
+            if (option == 3) {
+                System.out.println("\nopción 3");
+                System.out.println("\nIngrese el tipo perfume q desea buscar");
+
+                int perfume = sc.nextInt();
+                float total = ventas.totalPorTipos(perfume);
+
+                System.out.println("\n EL MONTO TOTAL DEL TIPO"+ perfume + ":" + total );
             }
-            case  4: {
-                System.out.println("\n Ingresar una opción 4");
-                break;
+            if (option == 4) {
+                System.out.println("\nopción 4");
+
             }
-            case 5: {
-                System.out.println("\n Ingresar una opción 5");
-                break;
+            if (option == 5) {
+                System.out.println("\nopción 5");
+
             }
         }
 
-
-
     }
 }
+
